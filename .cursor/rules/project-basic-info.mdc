@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Basic
+- use latest openai nodejs package
+- use bun as package manager
