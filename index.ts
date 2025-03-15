@@ -7,33 +7,13 @@ const client = new OpenAI();
 
 // 初始化 MCP 客户端
 let mcpClient: Client | null = null;
-let mcpTransport: StdioClientTransport | null = null;
-
-// MCP 服务器配置
-interface ServerConfig {
-  command: string;
-  args: string[];
-}
-
-const MCP_SERVERS: Record<string, ServerConfig> = {
-  "exa": {
-    "command": "npx",
-    "args": ["-y", "@smithery/cli", "install", "exa", "--client", "claude"]
-  }
-};
 
 // 连接到 MCP 服务器
 async function connectToMcpServer(serverName: string = "exa") {
   try {
-    const serverConfig = MCP_SERVERS[serverName];
-    
-    if (!serverConfig) {
-      throw new Error(`未找到服务器配置: ${serverName}`);
-    }
-    
-    mcpTransport = new StdioClientTransport({
-      command: serverConfig.command,
-      args: serverConfig.args
+    const transport = new StdioClientTransport({
+      command: "npx",
+      args: ["-y", "exa-mcp-server"]
     });
     
     mcpClient = new Client({
@@ -41,7 +21,7 @@ async function connectToMcpServer(serverName: string = "exa") {
       version: "1.0.0"
     });
     
-    mcpClient.connect(mcpTransport);
+    mcpClient.connect(transport);
     
     const toolsResult = await mcpClient.listTools();
     console.log("已连接到 MCP 服务器，可用工具:", toolsResult.tools.map(tool => tool.name));
@@ -82,7 +62,7 @@ async function main() {
   const messages: ChatCompletionMessageParam[] = [
     {
       role: "user",
-      content: "帮我搜索关于量子计算最新的研究进展"
+      content: "明天上海的天气怎么样"
     }
   ];
 

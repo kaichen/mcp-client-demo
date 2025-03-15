@@ -6,3 +6,4 @@ alwaysApply: true
 # Project Basic
 - use latest openai nodejs package
 - use bun as package manager
+- use openai gpt-4o-mini as demo model
